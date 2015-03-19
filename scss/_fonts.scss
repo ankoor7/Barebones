@@ -1,5 +1,5 @@
 //-------------------------------------------- Font-face declarations
 
-//---------------------- Icons
+//---------------------- Icon font
 
-@include font($icons, $font-path + 'icons/icons');
+@include font-face(nth($icons, 1), $font-path + 'icons/icons', $file-formats: woff ttf eot);

@@ -4,9 +4,25 @@
 
 @import 'bourbon/bourbon';
 
+//-------------------------------------------- Converts any color to transparent RGBA
+
+// Useful for avoiding a black tint in color to transparent gradients.
+
+@function transparent($color) {
+	@return rgba(red($color), green($color), blue($color), 0);
+}
+
+//-------------------------------------------- Gets a layer's z-index
+
+// Manage layers in the config file.
+
+@function layer($stack, $name, $base-index: 0) {
+	@return $base-index + index($stack, $name);
+}
+
 //-------------------------------------------- Media queries
 
-//---------------------- Media query with old IE fallback
+//---------------------- Sets a breakpoint
 
 @mixin breakpoint($size, $direction: min, $property: width) {
 	@if $ie-version == 8 {
@@ -26,7 +42,7 @@
 	}
 }
 
-//---------------------- Breakpoint range
+//---------------------- Sets a breakpoint range
 
 // Note: Sass conveniently combines nested media queries into one.
 
@@ -38,36 +54,7 @@
 	}
 }
 
-//-------------------------------------------- Old & new browsers
-
-//---------------------- Old IE only styles
-
-@mixin old-ie($version: all) {
-	@if $version == $ie-version or ($version == all and $ie-version != false) {
-		@content;
-	}
-}
-
-//---------------------- Modern browser only styles
-
-@mixin modern-browsers {
-	@if not $ie-version {
-		@content;
-	}
-}
-
-//-------------------------------------------- Automatic layering
-
-@mixin layer($name) {
-	$index: index($layers, $name);
-	@if $index {
-		z-index: $base-layer-index + $index;
-	} @else {
-		@warn "No layer named `#{$name}` exists in the layer list.";
-	}
-}
-
-//-------------------------------------------- Font icons
+//-------------------------------------------- Sets a font icon
 
 @mixin icon($position: before, $icon: false, $styles: true) {
 	@if $position == both {
@@ -75,7 +62,7 @@
 	}
 	&:#{$position} {
 		@if $icon {
-			content: "#{map-get($icon-list, $icon)}";
+			content: "#{map-get($font-icons, $icon)}";
 		}
 		@if $styles {
 			speak: none;
@@ -84,27 +71,5 @@
 			font-family: $icons;
 		}
 		@content;
-	}
-}
-
-//-------------------------------------------- Declares custom fonts
-
-@mixin font($font-family-stack, $file-path, $weight: normal, $style: normal, $old-ie-declaration: true) {
-	$font-family: nth($font-family-stack, 1);
-	@if $ie-version != 8 {
-		@font-face {
-			font-family: $font-family;
-			font-style: $style;
-			font-weight: $weight;
-			src: url($file-path + '.woff') format('woff'), url($file-path + '.ttf') format('truetype');
-		}
-	}
-	@if $old-ie-declaration {
-		@include old-ie(8) {
-			@font-face {
-			  font-family: $font-family;
-			  src: url($file-path + '.eot');
-			}
-		}
 	}
 }
