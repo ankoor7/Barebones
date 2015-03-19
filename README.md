@@ -114,7 +114,7 @@ body > header {
 
 ### Specify IE8, IE9 or modern browser only styles
 
-IE8 and IE9 runs `ie8.css` or `ie9.css` while everything else runs `modern-browsers.css` via HTML conditional comments. The Sass framework compliles relevent CSS to each of these files.
+IE8 and IE9 runs `main-ie8.css` or `main-ie9.css` while everything else runs `main.css` via HTML conditional comments. The Sass framework compliles relevent CSS to each of these files.
 
 Sass utility mixins `modern-browsers` and `old-ie` allow us to target specific browser generations for fixes. Styles set via `modern-browsers` are excluded from IE8 and IE9. Use `old-ie` to target IE <= 9 or specify the IE version as an argument.
 
@@ -131,7 +131,7 @@ button {
 
 ### Add IE only JS polyfills & fixes
 
-IE <= 9 runs `ie9.js` and IE <= 8 also runs `ie8.js` before `scripts.js` via conditional comments.
+IE <= 9 runs `ie9.js` and IE <= 8 also runs `ie8.js` before `main.js` via conditional comments.
 
 #### Example
 
