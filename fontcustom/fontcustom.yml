@@ -7,4 +7,4 @@ input:
 templates: [_font-icons.scss]
 output:
   fonts: ../fonts/icons
-  _icons.scss: ../scss
+  _font-icons.scss: ../scss
