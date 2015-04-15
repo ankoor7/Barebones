@@ -4,39 +4,30 @@
 
 The barebones needed to get started on a modern front end. Only the things needed in every responsive project are included; ready to extend as required. A Sassy and streamlined alternative to the [HTML5 Boilerplate](http://html5boilerplate.com).
 
-- No opinionated bloat or pre-developed components.
-- Logical Sass framework.
+- Minimalist [Sass](http://sass-lang.com) framework.
 - Super efficient font icons workflow.
-- Minimal HTTP requests.
+- Write standard CSS without prefixes thanks to [Autoprefixer](https://github.com/postcss/autoprefixer).
+- No opinionated bloat or pre-developed components.
+- Easy compilation via [Gulp](http://gulpjs.com), setup purely via [NPM](https://npmjs.com).
 
 ## Browser support
 
 All modern browsers and IE9+ are supported in the [*master* branch](https://github.com/jaydenseric/Barebones/tree/master). Checkout the [*ie8-support* branch](https://github.com/jaydenseric/Barebones/tree/ie8-support) for added IE8 support and documentation.
 
-## Requirements
+## Compilation
 
-- [Sass](https://github.com/sass/sass).
-- [Font Custom](https://github.com/FontCustom/fontcustom).
+1. Ensure [Node.js](https://nodejs.org) is installed.
+2. Ensure [Gulp](http://gulpjs.com) is installed: `npm install --global gulp`.
+3. In the repo, run `npm install`.
+4. Run `gulp` for a full compilation or `gulp watch` to automatically compile relevant assets when specific files change.
 
-## Getting started
-
-### Compile font icon setup
-
-```bash
-cd fontcustom; fontcustom watch
-```
-
-### Compile SCSS to CSS
-
-```bash
-sass --watch scss:css --style compressed --sourcemap=none
-```
+Node.js is only used for compilation during development and is not a server requirement.
 
 ## Sass structure
 
 Most Sass variables should be set in *_config.scss* for convenience and to ensure their availability throughout the project.
 
-The [Bourbon mixin library](http://bourbon.io) and other handy mixins are available from *_utilities.scss*. Add more of your own here as required.
+Handy mixins are available from *_utilities.scss*. Add more of your own here as required.
 
 Declare your fonts in *_fonts.scss*.
 
@@ -46,21 +37,25 @@ A simple [CSS foundation](http://jaydenseric.com/blog/forget-normalize-or-resets
 
 Place your main styles in *_styles.scss*, tapping into all the above.
 
+## Automatic CSS vendor prefixes
+
+Remember not to use vendor prefixes in your Sass, [Autoprefixer](https://github.com/postcss/autoprefixer) parses the compiled Sass and adds vendor-prefixed CSS properties using the [Can I Use](http://caniuse.com) database. You can [adjust the browsers supported](https://github.com/postcss/autoprefixer#browsers) in *gulpfile.js*.
+
 ## How-to
-
-### Use SVG images
-
-For IE8, SVG images are switched out via `ie8.js` for PNG files of the same name. Simply place your [optimized SVG](http://jaydenseric.com/blog/how-to-optimize-svg) files somewhere in `/images/` alongside identically named PNG fallback images.
 
 ### Create & use font icons
 
-Font icons are handled using a special [Font Custom](https://github.com/FontCustom/fontcustom) implementation. Refer to the article [*"Font icons like a boss with Sass & Font Custom"*](http://jaydenseric.com/blog/font-icons-like-a-boss-with-sass-and-font-custom) for detailed usage instructions.
+Adding and using custom font icons is a breeze thanks to Gulp.
 
-Manage all your project's font icons in */fontcustom/vectors/* as nicely named SVG files. Add icons to this folder to have the font magically recompiled and base64 embedded in the CSS, automatically set up for you to start using the icons in *_styles.scss* via their nice names using the `icon($position: before, $icon: false, $styles: true)` utility mixin; without touching your markup or dealing with non-semantic class names.
+1. Add an optimized SVG file named after the icon to */icons/vectors/*.
+2. If `gulp watch` was running (run `gulp` if you forgot) the icon font is automatically updated in the Sass as a Base64 WOFF data URI (IE8 gets an EOT font), along with a new unicode character map.
+3. Use the `icon($position: before, $icon: false, $styles: true)` mixin in *_styles.scss* to add the new icon wherever you like. Use the SVG filename without the extension for the `$icon` parameter. Easy!
+
+See [*"Fun with Sass & font icons"*](http://jaydenseric.com/blog/fun-with-sass-and-font-icons) to learn more about the mixin.
 
 #### Example
 
-The icon */fontcustom/vectors/menu.svg* is included by default. First make sure Font Custom and Sass are compiling (see ***Getting started***), then in *_styles.scss*:
+The icon *menu.svg* is included by default. First make sure to run `gulp` (see ***Compilation***), then in *_styles.scss*:
 
 ```scss
 .menu {
@@ -162,10 +157,18 @@ In *_styles.scss*:
 }
 ```
 
-### Add IE9 only JS polyfills & fixes
+### Use SVG images
 
-IE9 runs *ie9.js* before *main.js* via HTML conditional comments. Modern browsers do not download this file.
+For IE8, SVG images are switched out via *ie8.js* for PNG files of the same name. Simply place your [optimized SVG](http://jaydenseric.com/blog/how-to-optimize-svg) files somewhere in */images/* alongside identically named PNG fallback images.
+
+### Add IE8 or IE9 only JS polyfills & fixes
+
+- IE8 runs in order *ie8.js*, *ie9.js* and *main.js* via HTML conditional comments.
+- IE9 only runs *ie9.js* before *main.js*.
+- Modern browsers only download *main.js*.
+
+Remember to remove *ie9.js* if you don't use it.
 
 #### Example
 
-If you are using HTML5 form field `placeholder` attributes in your project and would like them to work in IE <= 9, add a polyfill such as [*mathiasbynens/jquery-placeholder*](http://mths.be/placeholder) to *ie9.js*.
+If you are using HTML5 form field `placeholder` attributes in your project and would like them to work in IE9, add a polyfill such as [*mathiasbynens/jquery-placeholder*](http://mths.be/placeholder) to *ie9.js*.

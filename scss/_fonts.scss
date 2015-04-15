@@ -2,4 +2,13 @@
 
 //---------------------- Icon font
 
-@include font-face(nth($icons, 1), $font-path + 'icons/icons', $file-formats: woff ttf eot);
+@if $ie-version == 8 {
+	@font-face {
+		font-family: nth($icons, 1);
+		src: url($font-path + 'icons/icons.eot');
+		font-weight: normal;
+		font-style: normal;
+	}
+} @else {
+	@import 'icon-font';
+}
