@@ -5,13 +5,16 @@ var paths = {
 	icons		: 'icons/',
 	fonts		: 'fonts/',
 	scss		: 'scss/',
-	css			: 'css/'
+	css			: 'css/',
+	js 			: 'js/',
+	tests		: 'tests/',
 };
 
 //------------------------------------------------ Resources
 
 var	gulp				= require('gulp'),
 	autoprefixer		= require('gulp-autoprefixer'),
+	jasmine			= require('gulp-jasmine-browser'),
 	sass				= require('gulp-sass'),
 	svg2ttf				= require('gulp-svg2ttf'),
 	svgicons2svgfont	= require('gulp-svgicons2svgfont'),
@@ -84,6 +87,14 @@ gulp.task('styles', function() {
 
 gulp.task('default', function() {
 	gulp.start('icons', 'fonts', 'styles');
+});
+
+//------------------------------------------------ TESTS
+
+gulp.task('test', function () {
+    	return gulp.src([ paths.js + '*.js', paths.tests  + '*.js'])
+    		.pipe(jasmine.specRunner({console: true}))
+    		.pipe(jasmine.headless());
 });
 
 //------------------------------------------------ Watch tasks
